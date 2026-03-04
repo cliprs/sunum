@@ -2,42 +2,55 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>CCT Finance | Sunum</title>
-    
-    <!-- Core Frameworks -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+
+    <!-- Detect mobile BEFORE any CSS loads -->
+    <script>
+        if (window.innerWidth <= 768) {
+            document.documentElement.classList.add('is-mobile');
+        }
+    </script>
+
+    <!-- Reveal CSS only for desktop -->
+    <script>
+        if (!document.documentElement.classList.contains('is-mobile')) {
+            ['https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css',
+             'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css',
+             'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css'
+            ].forEach(href => {
+                var l = document.createElement('link');
+                l.rel = 'stylesheet'; l.href = href;
+                document.head.appendChild(l);
+            });
+        }
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100;300;400;600;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --gold: #C5A059;
             --highlight-color: #FF8C00;
             --bg-dark: #020406;
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --line-pos: 80px; 
-            --safe-padding: 150px; 
+            --line-pos: 80px;
+            --safe-padding: 150px;
         }
 
+        /* ============================================================
+           DESKTOP STYLES (default)
+        ============================================================ */
         body { background-color: var(--bg-dark); margin: 0; overflow: hidden; }
         .reveal { font-family: 'Sora', sans-serif; color: #fff; }
 
-        /* --- SARI ÇİZGİ (DİKEY) --- */
         .side-bar {
             position: fixed; left: var(--line-pos); top: 0; width: 2px; height: 100%;
             background: var(--gold); box-shadow: 0 0 20px rgba(197, 160, 89, 0.3); z-index: 1001;
         }
-
-        /* --- NOKTA NAVİGASYONU --- */
         .dot-nav {
             position: fixed; right: 50px; bottom: 80px;
-            display: flex; flex-direction: column; align-items: center; gap: 20px;
-            z-index: 2000;
+            display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 2000;
         }
         .dot-line-bg { position: absolute; top: 5px; bottom: 5px; width: 1px; background: rgba(255,255,255,0.1); z-index: -1; }
         .dot-line-progress { position: absolute; top: 5px; width: 2px; background: var(--gold); z-index: -1; transition: height 0.6s ease; height: 0%; }
@@ -45,46 +58,27 @@
         .dot.active { background: var(--gold); box-shadow: 0 0 15px var(--gold); transform: scale(1.4); border-color: var(--gold); }
         .dot.passed { background: var(--gold); border-color: var(--gold); }
 
-        /* --- SLIDE İÇİ HEADER (GERÇEK SONSUZ ÇİZGİ) --- */
         .slide-internal-header {
-            width: 100%; padding-bottom: 25px; 
-            position: relative;
-            display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px;
+            width: 100%; padding-bottom: 25px;
+            position: relative; display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px;
         }
-
-        /* Sayfanın Dışına Taşan Kesintisiz Hat */
         .slide-internal-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: -5000px; /* Sola sonsuz uzat */
-            right: -5000px; /* Sağa sonsuz uzat */
-            height: 1px;
-            background: rgba(197, 160, 89, 0.25);
-            box-shadow: 0 0 10px rgba(197, 160, 89, 0.1);
+            content: ''; position: absolute; bottom: 0; left: -5000px; right: -5000px;
+            height: 1px; background: rgba(197, 160, 89, 0.25); box-shadow: 0 0 10px rgba(197, 160, 89, 0.1);
         }
-
         .slide-internal-header .title-label { color: var(--gold); font-size: 20px; letter-spacing: 8px; text-transform: uppercase; font-weight: 200; }
         .slide-internal-header .brand-meta { font-size: 11px; letter-spacing: 4px; opacity: 0.4; font-weight: 600; }
 
-        /* --- SLIDE AYARLARI --- */
-        .reveal .slides section { 
-            padding: 60px var(--safe-padding) !important; 
-            box-sizing: border-box; 
-            text-align: left;
-            overflow: visible !important; /* Taşmaya izin ver */
+        .reveal .slides section {
+            padding: 60px var(--safe-padding) !important;
+            box-sizing: border-box; text-align: left; overflow: visible !important;
         }
-
-        /* --- CONTENT GRID --- */
         .content-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; height: auto; align-items: flex-start; gap: 0; }
-
         .title-area h1 { font-size: 95px !important; font-weight: 800 !important; line-height: 1 !important; margin: 0 !important; letter-spacing: -4px !important; text-transform: uppercase; white-space: nowrap; }
         .gradient-text { background: linear-gradient(to right, #fff 20%, var(--gold) 70%, #A67C37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
         .description { margin: 40px 0 60px 0; font-size: 24px; opacity: 0.7; max-width: 850px; font-weight: 300; line-height: 1.8; letter-spacing: 0.5px; }
         .highlight { color: var(--highlight-color); font-weight: 600; }
 
-        /* Dikey Navigasyon */
         .vertical-nav { display: flex; flex-direction: column; gap: 15px; max-width: 320px; }
         .v-nav-item { display: flex; align-items: center; gap: 20px; cursor: pointer; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); opacity: 0.3; transition: all 0.3s ease; }
         .v-nav-item:hover { opacity: 0.8; padding-left: 10px; }
@@ -93,214 +87,200 @@
         .v-nav-item h4 { margin: 0 !important; font-size: 16px !important; letter-spacing: 3px !important; text-transform: uppercase !important; font-weight: 300 !important; color: #fff; }
         .v-nav-item.active h4 { font-weight: 700 !important; color: var(--gold); }
 
-        /* Detay Paneli */
         .detail-panel {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
             clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
-            border-radius: 0 24px 24px 0; 
-            margin-left: -150px; 
-            padding: 60px 60px 60px 280px; 
-            min-height: 480px; 
-            opacity: 0;
-            transform: translateY(10px); 
+            border-radius: 0 24px 24px 0; margin-left: -150px; padding: 60px 60px 60px 280px;
+            min-height: 480px; opacity: 0; transform: translateY(10px);
             transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         .detail-panel.active { opacity: 1; transform: translateY(0); }
-
         .detail-item { display: none; }
         .detail-item.active { display: block; animation: fadeIn 0.4s ease; }
-        
         .detail-item h3 { color: var(--gold); font-size: 30px !important; margin-bottom: 15px !important; font-weight: 700 !important; }
         .detail-item .item-intro { font-size: 22px; line-height: 1.6; opacity: 0.8; font-weight: 300; margin-bottom: 30px; display: block; }
-        
         .sub-features { display: flex; flex-direction: column; gap: 20px; }
         .sub-box { position: relative; border-left: 2px solid rgba(197, 160, 89, 0.2); padding-left: 25px; margin-left: 40px; }
-        
-        /* Adım Etiketleri (Vertical Alignment) */
-        .step-label {
-            position: absolute;
-            left: -20px; top: 0;
-            writing-mode: vertical-rl; transform: rotate(180deg);
-            color: var(--gold); font-size: 10px; letter-spacing: 2px; font-weight: 800; opacity: 0.6; white-space: nowrap;
-        }
-
+        .step-label { position: absolute; left: -20px; top: 0; writing-mode: vertical-rl; transform: rotate(180deg); color: var(--gold); font-size: 10px; letter-spacing: 2px; font-weight: 800; opacity: 0.6; white-space: nowrap; }
         .sub-box h5 { color: var(--highlight-color); font-size: 18px !important; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px !important; font-weight: 700 !important; }
         .sub-box p { font-size: 17px; line-height: 1.5; opacity: 0.6; margin: 0; font-weight: 300; }
 
-        /* --- MOBILE SNAP SCROLL --- */
-        @media screen and (max-width: 768px) {
-
-            /* Snap scroll kapsayıcı olarak html kullan */
-            html {
-                scroll-snap-type: y mandatory !important;
-                overflow-y: scroll !important;
-                height: 100% !important;
-            }
-            body { overflow: visible !important; height: auto !important; background: var(--bg-dark); }
-
-            /* Reveal wrapper'ları düz akışa al */
-            .reveal { position: relative !important; width: 100% !important; height: auto !important; overflow: visible !important; transform: none !important; }
-            .reveal .slides { position: relative !important; width: 100% !important; height: auto !important; overflow: visible !important; transform: none !important; left: auto !important; top: auto !important; }
-
-            /* Her slide = tam ekran snap */
-            .reveal .slides > section {
-                position: relative !important;
-                display: flex !important;
-                flex-direction: column !important;
-                width: 100% !important;
-                height: 100dvh !important;
-                min-height: 100dvh !important;
-                max-height: 100dvh !important;
-                padding: 52px 18px 20px 18px !important;
-                box-sizing: border-box !important;
-                text-align: left !important;
-                overflow: hidden !important;
-                scroll-snap-align: start !important;
-                scroll-snap-stop: always !important;
-            }
-            .reveal .slides > section.past,
-            .reveal .slides > section.future {
-                display: flex !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                transform: none !important;
-                pointer-events: auto !important;
-            }
-
-            :root { --line-pos: 12px; --safe-padding: 18px; }
-            .side-bar { display: none !important; }
-            .dot-nav { display: none !important; }
-
-            /* Header */
-            .slide-internal-header { 
-                flex-shrink: 0 !important;
-                margin-bottom: 10px !important; 
-                flex-direction: column !important; 
-                align-items: flex-start !important; 
-                gap: 3px !important;
-                padding-bottom: 10px !important;
-            }
-            .slide-internal-header .title-label { font-size: 11px !important; letter-spacing: 3px !important; }
-            .slide-internal-header .brand-meta { font-size: 9px !important; letter-spacing: 2px !important; }
-
-            /* Grid → flex column */
-            .content-grid { 
-                display: flex !important;
-                flex-direction: column !important;
-                flex: 1 !important;
-                min-height: 0 !important;
-                gap: 0 !important;
-                width: 100% !important;
-            }
-
-            /* Title area */
-            .title-area { flex-shrink: 0 !important; width: 100% !important; margin-bottom: 10px !important; }
-            .title-area > div[style*="width: 40px"] { margin-bottom: 10px !important; }
-            .title-area h1 { 
-                font-size: 34px !important; 
-                white-space: normal !important; 
-                line-height: 1.0 !important; 
-                letter-spacing: -1px !important;
-                margin-bottom: 6px !important;
-            }
-            .description { 
-                font-size: 13px !important; 
-                margin: 6px 0 10px 0 !important; 
-                line-height: 1.55 !important;
-                max-width: 100% !important;
-            }
-
-            /* TAB NAV — 2 sütun grid, 3. tam genişlik */
-            .vertical-nav { 
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                max-width: 100% !important; 
-                gap: 7px !important; 
-                padding-bottom: 0 !important;
-                border: none !important;
-                overflow: visible !important;
-                flex-direction: unset !important;
-                flex-shrink: 0 !important;
-            }
-            .vertical-nav .v-nav-item:first-child:nth-last-child(3),
-            .vertical-nav .v-nav-item:first-child:nth-last-child(3) ~ .v-nav-item:nth-child(2) {
-                grid-column: auto !important;
-            }
-            .vertical-nav .v-nav-item:first-child:nth-last-child(3) ~ .v-nav-item:nth-child(3) {
-                grid-column: 1 / -1 !important;
-            }
-
-            .v-nav-item { 
-                padding: 8px 12px !important; 
-                border: 1px solid rgba(197, 160, 89, 0.3) !important; 
-                border-radius: 8px !important;
-                border-bottom: 1px solid rgba(197, 160, 89, 0.3) !important;
-                opacity: 0.55 !important;
-                background: rgba(0,0,0,0.3) !important;
-                gap: 8px !important;
-                display: flex !important;
-                align-items: center !important;
-                flex-shrink: unset !important;
-            }
-            .v-nav-item:hover { padding-left: 12px !important; }
-            .v-nav-item.active { 
-                opacity: 1 !important; 
-                border-color: var(--gold) !important; 
-                border-bottom-color: var(--gold) !important;
-                background: rgba(197, 160, 89, 0.12) !important; 
-            }
-            .v-num { 
-                display: flex !important; 
-                width: 17px !important; height: 17px !important; 
-                font-size: 8px !important;
-                flex-shrink: 0 !important;
-            }
-            .v-nav-item h4 { 
-                font-size: 11px !important; 
-                letter-spacing: 0.3px !important; 
-                white-space: normal !important;
-                line-height: 1.3 !important;
-                margin: 0 !important;
-            }
-
-            /* Detail area — kalan alan */
-            .detail-area { 
-                width: 100% !important; 
-                margin-top: 8px !important;
-                flex: 1 !important;
-                min-height: 0 !important;
-                overflow-y: auto !important;
-            }
-            .detail-panel { 
-                margin-left: 0 !important; 
-                padding: 18px 16px !important; 
-                clip-path: none !important; 
-                border-radius: 12px !important; 
-                min-height: auto !important; 
-                background: rgba(255, 255, 255, 0.04) !important;
-                border: 1px solid rgba(255, 255, 255, 0.08) !important;
-                opacity: 1 !important;
-                transform: none !important;
-            }
-
-            .detail-item h3 { font-size: 17px !important; margin-bottom: 6px !important; }
-            .detail-item .item-intro { font-size: 13px !important; margin-bottom: 12px !important; line-height: 1.5 !important; display: block !important; }
-            
-            .sub-features { gap: 10px !important; }
-            .sub-box { 
-                margin-left: 0 !important; 
-                padding-left: 13px !important; 
-                border-left: 2px solid rgba(197, 160, 89, 0.5) !important;
-            }
-            .sub-box h5 { font-size: 12px !important; margin-bottom: 2px !important; }
-            .sub-box p { font-size: 12px !important; line-height: 1.45 !important; }
-            .step-label { display: none !important; }
-        }
-
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.1; }
         .bg-layer img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); }
+
+        /* ============================================================
+           MOBILE STYLES
+        ============================================================ */
+        html.is-mobile {
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            height: 100%;
+        }
+        html.is-mobile body {
+            overflow: visible;
+            height: auto;
+            font-family: 'Sora', sans-serif;
+            background: var(--bg-dark);
+            color: #fff;
+        }
+
+        /* Tüm Reveal wrapper'larını sıfırla */
+        html.is-mobile .reveal,
+        html.is-mobile .reveal .slides {
+            all: unset;
+            display: block;
+            width: 100%;
+        }
+
+        /* Her slide tam ekran snap */
+        html.is-mobile .reveal .slides > section {
+            all: unset;
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            height: 100dvh !important;
+            box-sizing: border-box !important;
+            padding: 44px 18px 16px 18px !important;
+            scroll-snap-align: start !important;
+            scroll-snap-stop: always !important;
+            overflow: hidden !important;
+            position: relative !important;
+            background: var(--bg-dark) !important;
+            justify-content: flex-start !important;
+        }
+
+        html.is-mobile .side-bar,
+        html.is-mobile .dot-nav { display: none !important; }
+
+        html.is-mobile .slide-internal-header {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(197,160,89,0.2);
+            width: 100%;
+            position: relative;
+        }
+        html.is-mobile .slide-internal-header::after { display: none; }
+        html.is-mobile .slide-internal-header .title-label { color: var(--gold); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; font-weight: 200; }
+        html.is-mobile .slide-internal-header .brand-meta { font-size: 9px; letter-spacing: 2px; opacity: 0.4; font-weight: 600; }
+
+        html.is-mobile .content-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            grid-template-columns: unset !important;
+            flex: 1 !important;
+            min-height: 0 !important;
+            gap: 0 !important;
+            width: 100% !important;
+        }
+
+        html.is-mobile .title-area {
+            flex-shrink: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 10px !important;
+        }
+        html.is-mobile .title-area h1 {
+            font-size: 34px !important;
+            font-weight: 800 !important;
+            white-space: normal !important;
+            line-height: 1.0 !important;
+            letter-spacing: -1px !important;
+            margin: 0 0 6px 0 !important;
+            text-transform: uppercase;
+        }
+        html.is-mobile .description {
+            font-size: 12px !important;
+            margin: 5px 0 8px 0 !important;
+            line-height: 1.55;
+            opacity: 0.7;
+            font-weight: 300;
+            max-width: 100% !important;
+        }
+        html.is-mobile .gradient-text {
+            background: linear-gradient(to right, #fff 20%, var(--gold) 70%, #A67C37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tab navigasyon — 2 sütun grid */
+        html.is-mobile .vertical-nav {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            flex-shrink: 0;
+            max-width: 100%;
+        }
+        html.is-mobile .vertical-nav .v-nav-item:first-child:nth-last-child(3) ~ .v-nav-item:nth-child(3) {
+            grid-column: 1 / -1;
+        }
+        html.is-mobile .v-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 9px 12px;
+            border: 1px solid rgba(197,160,89,0.3);
+            border-radius: 8px;
+            opacity: 0.55;
+            background: rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        html.is-mobile .v-nav-item.active {
+            opacity: 1;
+            border-color: var(--gold);
+            background: rgba(197,160,89,0.12);
+        }
+        html.is-mobile .v-num {
+            font-size: 8px; color: var(--gold); font-weight: 800;
+            border: 1px solid var(--gold); width: 17px; height: 17px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+            flex-shrink: 0;
+        }
+        html.is-mobile .v-nav-item h4 {
+            margin: 0 !important;
+            font-size: 11px !important;
+            letter-spacing: 0.3px !important;
+            text-transform: uppercase !important;
+            font-weight: 300 !important;
+            color: #fff;
+            line-height: 1.3;
+        }
+        html.is-mobile .v-nav-item.active h4 { font-weight: 700 !important; color: var(--gold); }
+
+        html.is-mobile .detail-area {
+            flex-shrink: 0 !important;
+            width: 100% !important;
+            margin-top: 8px !important;
+            overflow: visible !important;
+        }
+        html.is-mobile .detail-panel {
+            all: unset;
+            display: block;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 12px 13px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        html.is-mobile .detail-item { display: none; }
+        html.is-mobile .detail-item.active { display: block; }
+        html.is-mobile .detail-item h3 { color: var(--gold); font-size: 15px !important; margin: 0 0 4px 0 !important; font-weight: 700 !important; }
+        html.is-mobile .detail-item .item-intro { font-size: 11px; line-height: 1.45; opacity: 0.8; font-weight: 300; margin-bottom: 8px; display: block; }
+        html.is-mobile .sub-features { display: flex; flex-direction: column; gap: 6px; }
+        html.is-mobile .sub-box { position: relative; border-left: 2px solid rgba(197,160,89,0.5); padding-left: 10px; margin-left: 0; }
+        html.is-mobile .step-label { display: none; }
+        html.is-mobile .sub-box h5 { color: var(--highlight-color); font-size: 11px !important; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1px !important; font-weight: 700 !important; }
+        html.is-mobile .sub-box p { font-size: 10.5px; line-height: 1.4; opacity: 0.6; margin: 0; font-weight: 300; }
+        html.is-mobile .highlight { color: var(--highlight-color); font-weight: 600; }
+        html.is-mobile .bg-layer { display: none; }
     </style>
 </head>
 <body>
@@ -325,16 +305,16 @@
                 <div class="content-grid">
                     <div class="title-area">
                         <div style="width: 40px; height: 1px; background: var(--gold); margin-bottom: 30px;"></div>
-                        <h1 class="gradient-text">FİNANSAL MİMARİ.</h1>
-                        <p class="description">CCT Finance, bireysel yatırımcılar ile küresel likidite devleri (<span class="highlight">Tier-1 Brokers</span>) arasında yüksek hızlı bir köprü kuran hibrit bir teknoloji platformudur. Finansal piyasaların karmaşıklığını <span class="highlight">Expert Advisor</span> ve <span class="highlight">H2H</span> altyapısıyla basitleştiriyoruz.</p>
+                        <h1 class="gradient-text">CCT FİNANCE.</h1>
+                        <p class="description">Kurumsal altyapı ile bireysel yatırımı buluşturan <span class="highlight">teknoloji köprüsü.</span></p>
                         <div class="vertical-nav">
-                            <div class="v-nav-item active" onclick="toggleDetail('hiz', this, 1)"><div class="v-num">01</div><h4>Neden Ultra Hız?</h4></div>
-                            <div class="v-nav-item" onclick="toggleDetail('erisim', this, 1)"><div class="v-num">02</div><h4>Kurumsal Erişim</h4></div>
-                            <div class="v-nav-item" onclick="toggleDetail('guvenlik', this, 1)"><div class="v-num">03</div><h4>Tam Güvenlik</h4></div>
+                            <div class="v-nav-item active" onclick="toggleDetail('hiz', this)"><div class="v-num">01</div><h4>Ultra Hız</h4></div>
+                            <div class="v-nav-item" onclick="toggleDetail('erisim', this)"><div class="v-num">02</div><h4>Kurumsal Erişim</h4></div>
+                            <div class="v-nav-item" onclick="toggleDetail('guvenlik', this)"><div class="v-num">03</div><h4>Tam Güvenlik</h4></div>
                         </div>
                     </div>
                     <div class="detail-area">
-                        <div id="detail-panel-1" class="detail-panel active">
+                        <div class="detail-panel active">
                             <div id="hiz" class="detail-item active">
                                 <h3>Neden Ultra Hız?</h3>
                                 <span class="item-intro">Forex piyasasında kazanç ile kayıp arasındaki fark bazen sadece bir milisaniyedir. CCT, bu farkı sizin lehinize sabitler.</span>
@@ -379,13 +359,13 @@
                         <h1 class="gradient-text">TEKNOLOJİ KÖPRÜSÜ.</h1>
                         <p class="description">CCT Finance, geleneksel yatırım bariyerlerini teknolojiyle aşan kurumsal bir ekosistemdir.</p>
                         <div class="vertical-nav">
-                            <div class="v-nav-item active" onclick="toggleDetail('zirh', this, 2)"><div class="v-num">01</div><h4>Kurumsal Kaldıraç</h4></div>
-                            <div class="v-nav-item" onclick="toggleDetail('hibrit', this, 2)"><div class="v-num">02</div><h4>Ekosistem Mimarisi</h4></div>
-                            <div class="v-nav-item" onclick="toggleDetail('basitlik', this, 2)"><div class="v-num">03</div><h4>Şeffaf Yönetim</h4></div>
+                            <div class="v-nav-item active" onclick="toggleDetail('zirh', this)"><div class="v-num">01</div><h4>Kurumsal Kaldıraç</h4></div>
+                            <div class="v-nav-item" onclick="toggleDetail('hibrit', this)"><div class="v-num">02</div><h4>Ekosistem Mimarisi</h4></div>
+                            <div class="v-nav-item" onclick="toggleDetail('basitlik', this)"><div class="v-num">03</div><h4>Şeffaf Yönetim</h4></div>
                         </div>
                     </div>
                     <div class="detail-area">
-                        <div id="detail-panel-2" class="detail-panel active">
+                        <div class="detail-panel active">
                             <div id="zirh" class="detail-item active">
                                 <h3>Kurumsal Kaldıraç</h3>
                                 <span class="item-intro">Tek başınıza bir "perakende" müşterisinizdir. CCT ile kurumsal standartlarla konumlanırsınız.</span>
@@ -429,13 +409,13 @@
                         <h1 class="gradient-text">VARLIK GÜVENLİĞİ.</h1>
                         <p class="description">Sermayeniz, CCT'nin operasyonel giderlerinden bağımsız, "Segrege" hesaplarda tutulur.</p>
                         <div class="vertical-nav">
-                            <div class="v-nav-item active" onclick="toggleDetail('masterpool', this, 3)"><div class="v-num">01</div><h4>Master Pool Mimarisi</h4></div>
-                            <div class="v-nav-item" onclick="toggleDetail('whitelist', this, 3)"><div class="v-num">02</div><h4>WHITELIST Protokolü</h4></div>
-                            <div class="v-nav-item" onclick="toggleDetail('belge', this, 3)"><div class="v-num">03</div><h4>Resmi Sertifikasyon</h4></div>
+                            <div class="v-nav-item active" onclick="toggleDetail('masterpool', this)"><div class="v-num">01</div><h4>Master Pool Mimarisi</h4></div>
+                            <div class="v-nav-item" onclick="toggleDetail('whitelist', this)"><div class="v-num">02</div><h4>WHITELIST Protokolü</h4></div>
+                            <div class="v-nav-item" onclick="toggleDetail('belge', this)"><div class="v-num">03</div><h4>Resmi Sertifikasyon</h4></div>
                         </div>
                     </div>
                     <div class="detail-area">
-                        <div id="detail-panel-3" class="detail-panel active">
+                        <div class="detail-panel active">
                             <div id="masterpool" class="detail-item active">
                                 <h3>Master Pool Mimarisi</h3>
                                 <span class="item-intro">Sermayeniz, global finans devlerinin (Tier-1) kullandığı en üst düzey güvenlik protokolleriyle korunur.</span>
@@ -478,13 +458,13 @@
                         <h1 class="gradient-text">STRATEJİK BAŞLANGIÇ.</h1>
                         <p class="description">CCT ekosistemine katılım profesyonel bir disiplinle yönetilir.</p>
                         <div class="vertical-nav">
-                            <div class="v-nav-item active" onclick="toggleDetail('surec', this, 4)"><div class="v-num">01</div><h4>Aktivasyon Süreci</h4></div>
-                            <div class="v-nav-item" onclick="toggleDetail('buyume', this, 4)"><div class="v-num">02</div><h4>Kümülatif Büyüme</h4></div>
-                            <div class="v-nav-item" onclick="toggleDetail('cekme', this, 4)"><div class="v-num">03</div><h4>Para Çekme İşlemi</h4></div>
+                            <div class="v-nav-item active" onclick="toggleDetail('surec', this)"><div class="v-num">01</div><h4>Aktivasyon Süreci</h4></div>
+                            <div class="v-nav-item" onclick="toggleDetail('buyume', this)"><div class="v-num">02</div><h4>Kümülatif Büyüme</h4></div>
+                            <div class="v-nav-item" onclick="toggleDetail('cekme', this)"><div class="v-num">03</div><h4>Para Çekme İşlemi</h4></div>
                         </div>
                     </div>
                     <div class="detail-area">
-                        <div id="detail-panel-4" class="detail-panel active">
+                        <div class="detail-panel active">
                             <div id="surec" class="detail-item active">
                                 <h3>Aktivasyon Süreci</h3>
                                 <span class="item-intro">72 saatte finansal aktivasyon adımları.</span>
@@ -509,21 +489,9 @@
                                 <h3>Para Çekme İşlemi</h3>
                                 <span class="item-intro">Kazancınıza dilediğiniz an profesyonel bir hızla ulaşın.</span>
                                 <div class="sub-features">
-                                    <div class="sub-box">
-                                        <span class="step-label">ADIM 1</span>
-                                        <h5>İç Transfer</h5>
-                                        <p>Tutarı trading hesabınızdan cüzdanınıza transfer edersiniz.</p>
-                                    </div>
-                                    <div class="sub-box">
-                                        <span class="step-label">ADIM 2</span>
-                                        <h5>Yöntem Tanımlama</h5>
-                                        <p>Dashboard ekranınızdan parayı çekmek istediğiniz <span class="highlight">WHITELIST</span> onaylı banka hesabınızı seçersiniz.</p>
-                                    </div>
-                                    <div class="sub-box">
-                                        <span class="step-label">ADIM 3</span>
-                                        <h5>Talebin Sonuçlanması</h5>
-                                        <p>Para çekme talebiniz, seçtiğiniz Master'ın çalışma modeline göre aynı gün içinde veya hafta sonu hesabınıza yansır.</p>
-                                    </div>
+                                    <div class="sub-box"><span class="step-label">ADIM 1</span><h5>İç Transfer</h5><p>Tutarı trading hesabınızdan cüzdanınıza transfer edersiniz.</p></div>
+                                    <div class="sub-box"><span class="step-label">ADIM 2</span><h5>Yöntem Tanımlama</h5><p>Dashboard ekranınızdan parayı çekmek istediğiniz <span class="highlight">WHITELIST</span> onaylı banka hesabınızı seçersiniz.</p></div>
+                                    <div class="sub-box"><span class="step-label">ADIM 3</span><h5>Talebin Sonuçlanması</h5><p>Para çekme talebiniz, seçtiğiniz Master'ın çalışma modeline göre aynı gün içinde veya hafta sonu hesabınıza yansır.</p></div>
                                 </div>
                             </div>
                         </div>
@@ -534,79 +502,54 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
     <script>
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = document.documentElement.classList.contains('is-mobile');
 
-        if (!isMobile) {
-            // MASAÜSTÜ: Reveal.js normal çalışsın
-            Reveal.initialize({ 
-                width: 1920, 
-                height: 1080, 
-                margin: 0, 
-                minScale: 0.1, 
-                maxScale: 5.0, 
-                hash: true, 
-                center: true, 
-                transition: 'fade', 
-                mouseWheel: true, 
-                controls: false, 
-                progress: false 
-            });
-
-            // Dot navigation
-            const dotNav = document.getElementById('dot-nav');
-            const progressLine = document.getElementById('dot-progress');
-            const totalSlides = document.querySelectorAll('.reveal .slides > section').length;
-            for (let i = 0; i < totalSlides; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'dot' + (i === 0 ? ' active' : '');
-                dot.onclick = () => Reveal.slide(i);
-                dotNav.appendChild(dot);
-            }
-            Reveal.on('slidechanged', event => {
-                const dots = document.querySelectorAll('.dot');
-                const currentIndex = event.indexh;
-                dots.forEach((dot, idx) => { dot.classList.remove('active', 'passed'); if (idx === currentIndex) dot.classList.add('active'); else if (idx < currentIndex) dot.classList.add('passed'); });
-                const progressPercent = (currentIndex / (totalSlides - 1)) * 100;
-                progressLine.style.height = progressPercent + '%';
-            });
-
+        if (isMobile) {
+            // Reveal CSS hiç yüklenmedi, sadece saf HTML/CSS
+            // Touch/click için toggleDetail doğrudan çalışır
         } else {
-            // MOBİL: Reveal.js'i başlatma, snap scroll için tüm slide'ları aç
-            document.documentElement.style.cssText = 'scroll-snap-type:y mandatory;overflow-y:scroll;height:100%;';
-            document.body.style.cssText = 'overflow:visible;height:auto;background:#020406;';
-
-            const revealEl = document.querySelector('.reveal');
-            const slidesEl = document.querySelector('.reveal .slides');
-
-            revealEl.style.cssText = 'position:relative;width:100%;height:auto;overflow:visible;transform:none;';
-            slidesEl.style.cssText = 'position:relative;width:100%;height:auto;overflow:visible;transform:none;left:auto;top:auto;';
-
-            // Tüm slide'ları görünür ve snap-ready yap
-            document.querySelectorAll('.reveal .slides > section').forEach(section => {
-                section.style.cssText = '';
-                section.classList.remove('past', 'future', 'present');
-                // İlk detail-panel'i aktif et
-                const panel = section.querySelector('.detail-panel');
-                if (panel && !panel.classList.contains('active')) panel.classList.add('active');
-            });
-
-            // Dot nav ve side-bar'ı gizle
-            const dotNav = document.getElementById('dot-nav');
-            const sideBar = document.querySelector('.side-bar');
-            if (dotNav) dotNav.style.display = 'none';
-            if (sideBar) sideBar.style.display = 'none';
+            // MASAÜSTÜ: Reveal.js yükle
+            var s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js';
+            s.onload = function() {
+                Reveal.initialize({
+                    width: 1920, height: 1080, margin: 0,
+                    minScale: 0.1, maxScale: 5.0,
+                    hash: true, center: true,
+                    transition: 'fade', mouseWheel: true,
+                    controls: false, progress: false
+                });
+                var dotNav = document.getElementById('dot-nav');
+                var progressLine = document.getElementById('dot-progress');
+                var totalSlides = document.querySelectorAll('.reveal .slides > section').length;
+                for (var i = 0; i < totalSlides; i++) {
+                    var dot = document.createElement('div');
+                    dot.className = 'dot' + (i === 0 ? ' active' : '');
+                    dot.onclick = (function(idx){ return function(){ Reveal.slide(idx); }; })(i);
+                    dotNav.appendChild(dot);
+                }
+                Reveal.on('slidechanged', function(event) {
+                    var dots = document.querySelectorAll('.dot');
+                    var idx = event.indexh;
+                    dots.forEach(function(dot, i) {
+                        dot.classList.remove('active', 'passed');
+                        if (i === idx) dot.classList.add('active');
+                        else if (i < idx) dot.classList.add('passed');
+                    });
+                    progressLine.style.height = (idx / (totalSlides - 1) * 100) + '%';
+                });
+            };
+            document.head.appendChild(s);
         }
 
-        function toggleDetail(id, element, slideNum) {
-            const container = element.closest('section');
-            const items = container.querySelectorAll('.detail-item');
-            const navItems = container.querySelectorAll('.v-nav-item');
-            navItems.forEach(i => i.classList.remove('active'));
+        function toggleDetail(id, element) {
+            var container = element.closest('section');
+            container.querySelectorAll('.detail-item').forEach(function(i){ i.classList.remove('active'); });
+            container.querySelectorAll('.v-nav-item').forEach(function(i){ i.classList.remove('active'); });
             element.classList.add('active');
-            items.forEach(i => i.classList.remove('active'));
-            container.querySelector('#' + id).classList.add('active');
+            var target = document.getElementById(id);
+            if (target) target.classList.add('active');
         }
     </script>
 </body>
